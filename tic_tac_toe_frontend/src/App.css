@@ -1,0 +1,352 @@
+/* Theme Variables - Light theme oriented per requirements */
+:root {
+  --primary: #1976d2;
+  --secondary: #e0e0e0;
+  --accent: #d32f2f;
+
+  --bg: #ffffff;
+  --bg-muted: #f8f9fa;
+  --text: #1a1a1a;
+  --text-muted: #6b7280;
+  --border: #e5e7eb;
+
+  --btn-bg: var(--primary);
+  --btn-text: #ffffff;
+  --btn-outline-text: var(--primary);
+  --btn-outline-border: var(--primary);
+
+  /* Subtle 3D/lighting tokens to keep style minimal */
+  --elev1: 0 2px 6px rgba(0,0,0,0.05);
+  --elev2: 0 6px 16px rgba(0,0,0,0.08);
+  --elev3: 0 10px 24px rgba(0,0,0,0.10);
+  --inner-highlight: inset 0 1px 0 rgba(255,255,255,0.8);
+  --inner-shadow: inset 0 6px 12px rgba(0,0,0,0.04);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body, #root, .App {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Gentle global perspective to hint 3D without overpowering */
+  perspective: 900px;
+}
+
+/* Header */
+.ttt-header {
+  width: 100%;
+  max-width: 720px;
+  padding: 24px 16px 8px;
+  text-align: center;
+}
+
+.ttt-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.ttt-scoreboard {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.ttt-scoreboard .score {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-muted);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 12px;
+  /* Slight bevel */
+  box-shadow: var(--inner-highlight), var(--elev1);
+}
+
+.ttt-scoreboard .label {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.ttt-scoreboard .value {
+  color: var(--text-muted);
+}
+
+/* Main */
+.ttt-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: 8px 16px 24px;
+}
+
+.ttt-status {
+  margin: 12px 0 16px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Board - 3D card with layered rim */
+.board {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 90px);
+  grid-template-rows: repeat(3, 90px);
+  gap: 8px;
+  background: linear-gradient(180deg, #ffffff 0%, var(--bg-muted) 100%);
+  padding: 12px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow: var(--inner-highlight), var(--inner-shadow), var(--elev2);
+  transform-style: preserve-3d;
+  transform: rotateX(6deg) translateZ(0);
+}
+
+/* Subtle raised rim under the board */
+.board::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 12px;
+  pointer-events: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    inset 0 -8px 16px rgba(0,0,0,0.04);
+}
+
+/* Squares - pillowy tiles */
+.square {
+  width: 90px;
+  height: 90px;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  /* 3D look */
+  box-shadow:
+    var(--inner-highlight),
+    inset 0 -2px 6px rgba(0,0,0,0.03),
+    0 1px 0 rgba(255,255,255,0.8),
+    0 8px 14px rgba(0,0,0,0.06);
+  transform: translateZ(0);
+  transition:
+    transform .08s ease,
+    box-shadow .18s ease,
+    background .18s ease,
+    color .18s ease,
+    filter .18s ease;
+}
+
+.square:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    var(--inner-highlight),
+    inset 0 -2px 6px rgba(0,0,0,0.03),
+    0 2px 0 rgba(255,255,255,0.85),
+    0 14px 24px rgba(0,0,0,0.08);
+  filter: brightness(1.01);
+}
+
+.square:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 0 2px 8px rgba(0,0,0,0.06),
+    0 1px 0 rgba(255,255,255,0.8);
+}
+
+.square.filled {
+  background: #fafafa;
+}
+
+.square.highlight {
+  outline: 3px solid var(--accent);
+  color: var(--accent);
+  box-shadow:
+    0 0 0 4px rgba(211,47,47,0.08),
+    var(--elev3);
+}
+
+/* Controls */
+.ttt-controls {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn {
+  /* Gradient surface for subtle depth while keeping original color */
+  background: linear-gradient(180deg, rgba(255,255,255,0.15), rgba(0,0,0,0.0)) , var(--btn-bg);
+  color: var(--btn-text);
+  border: 1px solid var(--btn-bg);
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+
+  /* 3D button with layered shadows and highlights */
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.65) inset,      /* top highlight */
+    0 -3px 10px rgba(0,0,0,0.06) inset,        /* bottom inner shade */
+    0 2px 0 rgba(0,0,0,0.03),                  /* base rim */
+    var(--elev1);                               /* ambient shadow */
+  transform: translateZ(0);
+  transition:
+    transform .08s ease,
+    box-shadow .2s ease,
+    background .18s ease,
+    opacity .18s ease,
+    filter .18s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.75) inset,
+    0 -3px 10px rgba(0,0,0,0.06) inset,
+    0 6px 12px rgba(0,0,0,0.08);
+  opacity: 0.98;
+  filter: brightness(0.98);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 0 2px 8px rgba(0,0,0,0.08),
+    0 1px 0 rgba(255,255,255,0.65);
+}
+
+/* Outline/secondary button keeps light palette with 3D rim */
+.btn.btn-outline {
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+  color: var(--btn-outline-text);
+  border-color: var(--btn-outline-border);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.85) inset,
+    0 -2px 6px rgba(0,0,0,0.04) inset,
+    var(--elev1);
+}
+
+.btn.btn-outline:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 -2px 6px rgba(0,0,0,0.04) inset,
+    var(--elev2);
+}
+
+.btn.btn-outline:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 0 2px 8px rgba(0,0,0,0.06),
+    0 1px 0 rgba(255,255,255,0.8);
+}
+
+/* Radio controls (ModeToggle) as 3D pill labels while preserving native inputs */
+.ttt-controls label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 -2px 6px rgba(0,0,0,0.04) inset,
+    var(--elev1);
+  transition: transform .08s ease, box-shadow .18s ease, filter .18s ease;
+}
+
+.ttt-controls label:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.95) inset,
+    0 -2px 6px rgba(0,0,0,0.04) inset,
+    var(--elev2);
+  filter: brightness(1.01);
+}
+
+.ttt-controls label:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 0 2px 8px rgba(0,0,0,0.06),
+    0 1px 0 rgba(255,255,255,0.85);
+}
+
+/* Tighter visual for native radio inputs */
+.ttt-controls input[type="radio"] {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--btn-outline-border);
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffffff 0%, #f2f6ff 100%);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    var(--elev1);
+  display: inline-block;
+  position: relative;
+  outline: none;
+}
+
+.ttt-controls input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
+}
+
+/* Footer */
+.ttt-footer {
+  width: 100%;
+  text-align: center;
+  padding: 12px 16px 24px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+/* Responsive */
+@media (max-width: 420px) {
+  .board {
+    grid-template-columns: repeat(3, 80px);
+    grid-template-rows: repeat(3, 80px);
+    transform: rotateX(5deg);
+  }
+  .square {
+    width: 80px;
+    height: 80px;
+    font-size: 34px;
+  }
+}
