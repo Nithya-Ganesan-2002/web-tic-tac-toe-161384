@@ -202,23 +202,25 @@ body {
 }
 
 .btn {
-  background: var(--btn-bg);
+  /* Gradient surface for subtle depth while keeping original color */
+  background: linear-gradient(180deg, rgba(255,255,255,0.15), rgba(0,0,0,0.0)) , var(--btn-bg);
   color: var(--btn-text);
   border: 1px solid var(--btn-bg);
   padding: 10px 16px;
-  border-radius: 10px;
-  font-weight: 600;
+  border-radius: 12px;
+  font-weight: 700;
   cursor: pointer;
 
-  /* 3D button */
+  /* 3D button with layered shadows and highlights */
   box-shadow:
-    0 1px 0 rgba(255,255,255,0.6) inset,
-    0 -2px 8px rgba(0,0,0,0.05) inset,
-    var(--elev1);
+    0 1px 0 rgba(255,255,255,0.65) inset,      /* top highlight */
+    0 -3px 10px rgba(0,0,0,0.06) inset,        /* bottom inner shade */
+    0 2px 0 rgba(0,0,0,0.03),                  /* base rim */
+    var(--elev1);                               /* ambient shadow */
   transform: translateZ(0);
   transition:
     transform .08s ease,
-    box-shadow .18s ease,
+    box-shadow .2s ease,
     background .18s ease,
     opacity .18s ease,
     filter .18s ease;
@@ -227,9 +229,9 @@ body {
 .btn:hover {
   transform: translateY(-2px);
   box-shadow:
-    0 1px 0 rgba(255,255,255,0.7) inset,
-    0 -2px 8px rgba(0,0,0,0.05) inset,
-    var(--elev2);
+    0 1px 0 rgba(255,255,255,0.75) inset,
+    0 -3px 10px rgba(0,0,0,0.06) inset,
+    0 6px 12px rgba(0,0,0,0.08);
   opacity: 0.98;
   filter: brightness(0.98);
 }
@@ -237,18 +239,93 @@ body {
 .btn:active {
   transform: translateY(0);
   box-shadow:
-    0 0 0 rgba(0,0,0,0),
-    0 1px 0 rgba(255,255,255,0.6) inset,
-    var(--elev1);
+    inset 0 2px 8px rgba(0,0,0,0.08),
+    0 1px 0 rgba(255,255,255,0.65);
 }
 
+/* Outline/secondary button keeps light palette with 3D rim */
 .btn.btn-outline {
   background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
   color: var(--btn-outline-text);
   border-color: var(--btn-outline-border);
   box-shadow:
-    0 1px 0 rgba(255,255,255,0.8) inset,
+    0 1px 0 rgba(255,255,255,0.85) inset,
+    0 -2px 6px rgba(0,0,0,0.04) inset,
     var(--elev1);
+}
+
+.btn.btn-outline:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 -2px 6px rgba(0,0,0,0.04) inset,
+    var(--elev2);
+}
+
+.btn.btn-outline:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 0 2px 8px rgba(0,0,0,0.06),
+    0 1px 0 rgba(255,255,255,0.8);
+}
+
+/* Radio controls (ModeToggle) as 3D pill labels while preserving native inputs */
+.ttt-controls label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 8px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    0 -2px 6px rgba(0,0,0,0.04) inset,
+    var(--elev1);
+  transition: transform .08s ease, box-shadow .18s ease, filter .18s ease;
+}
+
+.ttt-controls label:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.95) inset,
+    0 -2px 6px rgba(0,0,0,0.04) inset,
+    var(--elev2);
+  filter: brightness(1.01);
+}
+
+.ttt-controls label:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 0 2px 8px rgba(0,0,0,0.06),
+    0 1px 0 rgba(255,255,255,0.85);
+}
+
+/* Tighter visual for native radio inputs */
+.ttt-controls input[type="radio"] {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--btn-outline-border);
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffffff 0%, #f2f6ff 100%);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.9) inset,
+    var(--elev1);
+  display: inline-block;
+  position: relative;
+  outline: none;
+}
+
+.ttt-controls input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 50%;
+  background: var(--primary);
+  box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset;
 }
 
 /* Footer */
