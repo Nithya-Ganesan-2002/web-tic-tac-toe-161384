@@ -14,6 +14,13 @@
   --btn-text: #ffffff;
   --btn-outline-text: var(--primary);
   --btn-outline-border: var(--primary);
+
+  /* Subtle 3D/lighting tokens to keep style minimal */
+  --elev1: 0 2px 6px rgba(0,0,0,0.05);
+  --elev2: 0 6px 16px rgba(0,0,0,0.08);
+  --elev3: 0 10px 24px rgba(0,0,0,0.10);
+  --inner-highlight: inset 0 1px 0 rgba(255,255,255,0.8);
+  --inner-shadow: inset 0 6px 12px rgba(0,0,0,0.04);
 }
 
 * {
@@ -34,6 +41,8 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* Gentle global perspective to hint 3D without overpowering */
+  perspective: 900px;
 }
 
 /* Header */
@@ -66,6 +75,8 @@ body {
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 6px 12px;
+  /* Slight bevel */
+  box-shadow: var(--inner-highlight), var(--elev1);
 }
 
 .ttt-scoreboard .label {
@@ -94,19 +105,35 @@ body {
   color: var(--text);
 }
 
-/* Board */
+/* Board - 3D card with layered rim */
 .board {
+  position: relative;
   display: grid;
   grid-template-columns: repeat(3, 90px);
   grid-template-rows: repeat(3, 90px);
   gap: 8px;
-  background: var(--bg-muted);
+  background: linear-gradient(180deg, #ffffff 0%, var(--bg-muted) 100%);
   padding: 12px;
   border-radius: 16px;
   border: 1px solid var(--border);
-  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  box-shadow: var(--inner-highlight), var(--inner-shadow), var(--elev2);
+  transform-style: preserve-3d;
+  transform: rotateX(6deg) translateZ(0);
 }
 
+/* Subtle raised rim under the board */
+.board::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 12px;
+  pointer-events: none;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.9),
+    inset 0 -8px 16px rgba(0,0,0,0.04);
+}
+
+/* Squares - pillowy tiles */
 .square {
   width: 90px;
   height: 90px;
@@ -120,12 +147,37 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: transform .06s ease, box-shadow .2s ease, background .2s ease;
+
+  /* 3D look */
+  box-shadow:
+    var(--inner-highlight),
+    inset 0 -2px 6px rgba(0,0,0,0.03),
+    0 1px 0 rgba(255,255,255,0.8),
+    0 8px 14px rgba(0,0,0,0.06);
+  transform: translateZ(0);
+  transition:
+    transform .08s ease,
+    box-shadow .18s ease,
+    background .18s ease,
+    color .18s ease,
+    filter .18s ease;
 }
 
 .square:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+  transform: translateY(-2px);
+  box-shadow:
+    var(--inner-highlight),
+    inset 0 -2px 6px rgba(0,0,0,0.03),
+    0 2px 0 rgba(255,255,255,0.85),
+    0 14px 24px rgba(0,0,0,0.08);
+  filter: brightness(1.01);
+}
+
+.square:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 0 2px 8px rgba(0,0,0,0.06),
+    0 1px 0 rgba(255,255,255,0.8);
 }
 
 .square.filled {
@@ -135,6 +187,9 @@ body {
 .square.highlight {
   outline: 3px solid var(--accent);
   color: var(--accent);
+  box-shadow:
+    0 0 0 4px rgba(211,47,47,0.08),
+    var(--elev3);
 }
 
 /* Controls */
@@ -152,23 +207,46 @@ body {
   border-radius: 10px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform .06s ease, box-shadow .2s ease, background .2s ease, opacity .2s ease;
+
+  /* 3D button */
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.6) inset,
+    0 -2px 8px rgba(0,0,0,0.05) inset,
+    var(--elev1);
+  transform: translateZ(0);
+  transition:
+    transform .08s ease,
+    box-shadow .18s ease,
+    background .18s ease,
+    opacity .18s ease,
+    filter .18s ease;
 }
 
 .btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(0,0,0,0.06);
-  opacity: 0.95;
+  transform: translateY(-2px);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.7) inset,
+    0 -2px 8px rgba(0,0,0,0.05) inset,
+    var(--elev2);
+  opacity: 0.98;
+  filter: brightness(0.98);
 }
 
 .btn:active {
   transform: translateY(0);
+  box-shadow:
+    0 0 0 rgba(0,0,0,0),
+    0 1px 0 rgba(255,255,255,0.6) inset,
+    var(--elev1);
 }
 
 .btn.btn-outline {
-  background: transparent;
+  background: linear-gradient(180deg, #ffffff 0%, #f9fbff 100%);
   color: var(--btn-outline-text);
   border-color: var(--btn-outline-border);
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.8) inset,
+    var(--elev1);
 }
 
 /* Footer */
@@ -185,6 +263,7 @@ body {
   .board {
     grid-template-columns: repeat(3, 80px);
     grid-template-rows: repeat(3, 80px);
+    transform: rotateX(5deg);
   }
   .square {
     width: 80px;
